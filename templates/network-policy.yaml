@@ -1,0 +1,90 @@
+{{- if ((.Values.netpol)) -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{.Values.name}}
+    env: {{.Release.Namespace}}
+spec:
+  podSelector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - {{ .Values.name }}
+  policyTypes:
+  {{- if .Values.netpol.egress }}
+    - Egress
+  {{- end }}
+  {{- if .Values.netpol.ingress }}
+    - Ingress
+  {{- end }}
+
+  # BEGIN - ingress section
+  {{- if .Values.netpol.ingress }}
+  ingress:
+  {{- if .Values.netpol.ingress.ports }}
+    - ports:
+      {{- range .Values.netpol.ingress.ports }}
+      - port: {{ .port }}
+        protocol: {{ .protocol |default "TCP"}}
+      {{- end }}
+      from:
+        - namespaceSelector:
+            matchExpressions:
+              - key: name
+                operator: In
+                values:
+                  - prod
+                  - dev
+                  - test
+      {{- end }}
+      {{- end }}           
+      # END - ingress section
+  # BEGIN - egress section
+  {{- if .Values.netpol.egress }}
+  egress:
+  {{- if .Values.netpol.egress.ports }}
+    - ports:
+      {{- range .Values.netpol.egress.ports }}
+      - port: {{ . }}
+        protocol: TCP
+      {{- end }}
+
+  {{- if .Values.netpol.egress.targeting }}
+      to: 
+      {{- if .Values.netpol.egress.targeting.namespace }}
+        {{- if (contains ":" .Values.netpol.egress.targeting.namespace ) }}
+        - namespaceSelector:
+            matchLabels:
+              name: {{ (split ":" .Values.netpol.egress.targeting.namespace)._0 }}
+          podSelector:
+            matchLabels:
+              app: {{ (split ":" .Values.netpol.egress.targeting.namespace)._1 }}
+        {{- else }}
+        - namespaceSelector:
+            matchLabels:
+              name: {{ .Values.netpol.egress.targeting.namespace }}
+        {{- end }}
+
+
+      {{- else if .Values.netpol.egress.targeting.cidr }}
+        - ipBlock:
+            cidr: {{ .Values.netpol.egress.targeting.cidr }}
+
+      {{- else if .Values.netpol.egress.targeting.pod }}
+        - podSelector:
+            matchLabels:
+              app: {{ .Values.netpol.egress.targeting.pod }}
+      {{- end }}
+
+  {{- end }} 
+
+  {{- end }}
+
+{{- end }} 
+# END - egress section
+
+{{- end }}

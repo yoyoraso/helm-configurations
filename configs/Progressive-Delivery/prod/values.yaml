@@ -1,0 +1,15 @@
+resources:
+  limits:
+    cpu: 100m
+    memory: 150Mi
+  requests:
+    cpu: 100m
+    memory: 150Mi
+volumes:
+  - mountPath: /usr/share/nginx/html
+    name: nginx-config-progressive-Delivery
+    volume:
+      configMap:
+        name: application-config-progressive-Delivery
+image:
+  name: nginx
