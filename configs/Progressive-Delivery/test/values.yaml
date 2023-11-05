@@ -8,9 +8,10 @@ resources:
 volumes:
   - mountPath: /usr/share/nginx/html
     name: nginx-config-progressive-Delivery
-    subPath: index.html
     volume:
       configMap:
         name: application-config-progressive-Delivery
+        
+
 image:
   name: nginx
