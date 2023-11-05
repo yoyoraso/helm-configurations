@@ -24,3 +24,59 @@ spec:
     port: {{ ((.Values.service).port) | default 80 }}
     targetPort: {{ ((.Values.service).targetPort) | default 80 }}  
   {{- end }}
+--- 
+{{- if .Values.prod }}
+apiVersion: v1 
+kind: Service 
+metadata:
+  labels:
+    app: {{ .Values.name }}
+    env: {{ .Release.Namespace }}
+  name: {{ .Values.name }}-active
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: {{ .Values.name }}
+    env: {{ .Release.Namespace }}   
+  ports:
+  {{- if .Values.multiport }}
+    {{- range .Values.service.ports }}
+  - name: {{ .name | default "http" }}
+    port: {{ .port | default 80 }}
+    protocol: {{ .protocol | default "TCP" }}
+    targetPort: {{ .targetPort | default 80 }}
+    {{- end }}
+  {{- else }}
+  - name: {{ ((.Values.service).name) | default "http" }}
+    port: {{ ((.Values.service).port) | default 80 }}
+    targetPort: {{ ((.Values.service).targetPort) | default 80 }}  
+  {{- end }}
+{{- end }}  
+--- 
+{{- if .Values.prod }}
+apiVersion: v1 
+kind: Service 
+metadata:
+  labels:
+    app: {{ .Values.name }}
+    env: {{ .Release.Namespace }}
+  name: {{ .Values.name }}-preview
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: {{ .Values.name }}
+    env: {{ .Release.Namespace }}   
+  ports:
+  {{- if .Values.multiport }}
+    {{- range .Values.service.ports }}
+  - name: {{ .name | default "http" }}
+    port: {{ .port | default 80 }}
+    protocol: {{ .protocol | default "TCP" }}
+    targetPort: {{ .targetPort | default 80 }}
+    {{- end }}
+  {{- else }}
+  - name: {{ ((.Values.service).name) | default "http" }}
+    port: {{ ((.Values.service).port) | default 80 }}
+    targetPort: {{ ((.Values.service).targetPort) | default 80 }}  
+  {{- end }}  
+{{- end }} 

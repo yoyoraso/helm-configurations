@@ -1,0 +1,123 @@
+{{- if .Values.prod }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  labels:
+    app: {{.Values.name}}
+    env: {{.Release.Namespace}}
+  name: {{.Values.name}}
+  namespace: prod
+spec:
+  selector:
+    matchLabels:
+      app: {{.Values.name}}
+      env: prod
+  strategy:
+    blueGreen:
+      activeService: {{.Values.name}}-active
+      autoPromotionEnabled: false
+      previewService: {{.Values.name}}-preview      
+  replicas: {{.Values.replicas}}
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        app: {{.Values.name}}
+        env: prod
+    spec:
+    
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+          {{- toYaml . | nindent 10 }}
+    {{- end }}
+
+    {{- with .Values.hostAliases }}
+      hostAliases:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      containers:
+      - name: application
+        image: {{ .Values.image.name }}
+        imagePullPolicy: Always
+        {{- if .Values.secrets }}
+        envFrom:
+        - secretRef:
+            name: {{.Values.name}}
+        {{- end }}
+
+        {{- with .Values.env }}
+        env:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+
+          {{- with .Values.livenessProbe }}
+        livenessProbe:
+          {{- toYaml . | nindent 12 }}
+          {{- end}}
+          {{- with .Values.readinessProbe}}
+        readinessProbe:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.startupProbe }}
+        startupProbe:
+          {{- toYaml . | nindent 12 }}
+          {{- end}}
+          {{- with .Values.resources}}
+        resources:
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- if .Values.enablecommand }}          
+          {{- with .Values.command }}  
+        command:
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+        {{- end }}  
+        ports:
+        {{- if .Values.multiport }}
+          {{- range .Values.service.ports }}
+          - containerPort: {{ .targetPort | default 8080 }}
+            name: {{ .name | default "http" }}
+            protocol: {{ .protocol | default "TCP" }}
+          {{- end }}
+        {{- else }}
+          - containerPort: {{ ((.Values.service).targetPort) | default 8080 }}
+            name: {{ ((.Values.service).name) | default "http" }}
+        {{- end }}              
+        volumeMounts:
+        {{- range .Values.volumes }}
+        - name: {{ .name | quote }}
+          mountPath: {{ .mountPath | quote }}
+          {{- if .readOnly }}
+          readOnly: {{ .readOnly | default false }}
+          {{- end }}
+        {{- end }}
+      {{- if .Values.sidecarContainers }}
+
+{{ toYaml .Values.sidecarContainers | indent 6 }}
+
+      {{- end}}
+
+
+      volumes:
+      {{- range .Values.volumes }}
+      {{- if .volume }}
+      - name: {{ .name }}
+        {{- with .volume }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end}}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+{{- end }}

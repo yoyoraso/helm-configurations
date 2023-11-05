@@ -13,3 +13,5 @@ volumes:
         name: application-config-progressive-Delivery
 image:
   name: nginx
+
+prod: true
