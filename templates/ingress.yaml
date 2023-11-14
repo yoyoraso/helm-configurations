@@ -13,14 +13,9 @@ metadata:
 spec:
   rules:
   {{- if .Values.bluegreen }}
-  - host: argo-rollouts-bluegreen.io
-  {{- end }} 
-  {{- if .Values.bluegreen }}
-  - host: argo-rollouts-canary.io
-  {{- end }}   
+  - host: argo-rollouts-bluegreen.io  
     http:
       paths:
-      {{- if .Values.bluegreen }}
       - path: /blue-green/active
         pathType: ImplementationSpecific
         backend:
@@ -35,8 +30,11 @@ spec:
             name: {{.Values.name}}-preview
             port:
               number: {{ ((.Values.service).port) | default 80 }} 
-      {{- end }}        
-      {{- if .Values.canary }}        
+  {{- end }}              
+  {{- if .Values.canary }}
+  - host: argo-rollouts-canary.io  
+    http:
+      paths:                            
       - path: /
         pathType: Prefix
         backend:
@@ -44,5 +42,5 @@ spec:
             name: {{ .Values.name }}
             port:
               number: {{ ((.Values.service).port) | default 8080 }}
-      {{- end }}             
-    {{- end }}
+  {{- end }}             
+{{- end }}
