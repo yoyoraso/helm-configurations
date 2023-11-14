@@ -11,7 +11,8 @@ volumes:
     volume:
       configMap:
         name: application-config-progressive-Delivery
-        
-
+        items:
+          - key: index-blue.html
+            path: index.html
 image:
   name: nginx
