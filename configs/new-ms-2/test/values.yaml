@@ -16,3 +16,5 @@ volumes:
             path: index.html
 image:
   name: nginx
+  
+preprod: true
