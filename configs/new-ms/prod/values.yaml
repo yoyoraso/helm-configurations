@@ -12,7 +12,7 @@ volumes:
       configMap:
         name: application-config-new-ms
         items:
-          - key: index-green.html
+          - key: index-blue.html
             path: index.htm
 image:
   name: nginx
