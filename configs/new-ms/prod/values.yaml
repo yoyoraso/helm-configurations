@@ -16,6 +16,10 @@ resources:
 #             path: index.htm
 image:
   name: argoproj/rollouts-demo:green
+service:
+  name: http
+  port: 80
+  targetPort: 8080
 
 prod: true
 canary: true
