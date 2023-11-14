@@ -16,4 +16,9 @@ volumes:
             path: index.html
 image:
   name: nginx
+service:
+  name: http
+  port: 80
+  targetPort: 80
+  
 preprod: true
