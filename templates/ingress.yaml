@@ -36,4 +36,4 @@ spec:
           name: {{ .Values.name }}
           port:
             number: {{ ((.Values.service).port) | default 80 }}
-{{- end -}}
+    {{- end }}
