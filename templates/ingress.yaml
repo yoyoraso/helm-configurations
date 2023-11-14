@@ -12,7 +12,12 @@ metadata:
   namespace: {{.Release.Namespace}}
 spec:
   rules:
-  - host: argo-rollouts.io
+  {{- if .Values.bluegreen }}
+  - host: argo-rollouts-bluegreen.io
+  {{- end }} 
+  {{- if .Values.bluegreen }}
+  - host: argo-rollouts-canary.io
+  {{- end }}   
     http:
       paths:
       {{- if .Values.bluegreen }}
