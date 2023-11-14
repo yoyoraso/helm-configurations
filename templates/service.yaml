@@ -22,8 +22,8 @@ spec:
     {{- end }}
   {{- else }}
   - name: {{ ((.Values.service).name) | default "http" }}
-    port: {{ ((.Values.service).port) | default 80 }}
-    targetPort: {{ ((.Values.service).targetPort) | default 80 }}  
+    port: {{ ((.Values.service).port) | default 8080 }}
+    targetPort: {{ ((.Values.service).targetPort) | default 8080 }}  
   {{- end }}
 {{- end }}  
 --- 
