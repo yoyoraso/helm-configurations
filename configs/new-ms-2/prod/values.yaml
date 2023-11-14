@@ -16,6 +16,8 @@ volumes:
             path: index.htm
 image:
   name: nginx
+ingress:
+  name: new-ms-2  
 service:
   name: http
   port: 80
