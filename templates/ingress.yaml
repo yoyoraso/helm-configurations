@@ -5,6 +5,7 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
   labels:
     app: {{.Values.name}}
     env: {{.Release.Namespace}}
@@ -16,14 +17,14 @@ spec:
   - host: argo-rollouts-bluegreen.io  
     http:
       paths:
-      - path: /blue-green/active
+      - path: /active
         pathType: ImplementationSpecific
         backend:
           service:
             name: {{.Values.name}}-active
             port:
               number: {{ ((.Values.service).port) | default 80 }}
-      - path: /blue-green/preview
+      - path: /preview
         pathType: ImplementationSpecific
         backend:
           service:
