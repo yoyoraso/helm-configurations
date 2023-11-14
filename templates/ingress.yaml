@@ -15,25 +15,25 @@ spec:
   - host: argo-rollouts.io
     http:
       paths:
-          - path: /blue-green/active
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: {{ $.Values.name }}-active
-                port:
-                  number: {{ (($.Values.service).port) | default 80 }}
-          - path: /blue-green/preview
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: {{ $.Values.name }}-preview
-                port:
-                  number: {{ (($.Values.service).port) | default 80 }}                    
-        - path: /canary
-          pathType: ImplementationSpecific
-          backend:
-            service:
-              name: {{ .Values.name }}
-              port:
-                number: {{ ((.Values.service).port) | default 80 }}
+      - path: /blue-green/active
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: {{ $.Values.name }}-active
+            port:
+              number: {{ (($.Values.service).port) | default 80 }}
+      - path: /blue-green/preview
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: {{ $.Values.name }}-preview
+            port:
+              number: {{ (($.Values.service).port) | default 80 }}                    
+    - path: /canary
+      pathType: ImplementationSpecific
+      backend:
+        service:
+          name: {{ .Values.name }}
+          port:
+            number: {{ ((.Values.service).port) | default 80 }}
 {{- end -}}
