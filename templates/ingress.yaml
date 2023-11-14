@@ -19,16 +19,16 @@ spec:
         pathType: ImplementationSpecific
         backend:
           service:
-            name: {{ $.Values.name }}-active
+            name: {{ .Values.name }}-active
             port:
-              number: {{ (($.Values.service).port) | default 80 }}
+              number: {{ ((.Values.service).port) | default 80 }}
       - path: /blue-green/preview
         pathType: ImplementationSpecific
         backend:
           service:
-            name: {{ $.Values.name }}-preview
+            name: {{ .Values.name }}-preview
             port:
-              number: {{ (($.Values.service).port) | default 80 }}                    
+              number: {{ ((.Values.service).port) | default 80 }}                    
     - path: /canary
       pathType: ImplementationSpecific
       backend:
