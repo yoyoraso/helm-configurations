@@ -1,3 +1,4 @@
+{{- if .Values.preprod }}
 --- 
 apiVersion: v1 
 kind: Service 
@@ -24,6 +25,7 @@ spec:
     port: {{ ((.Values.service).port) | default 80 }}
     targetPort: {{ ((.Values.service).targetPort) | default 80 }}  
   {{- end }}
+{{- end }}  
 --- 
 {{- if .Values.prod }}
 apiVersion: v1 
