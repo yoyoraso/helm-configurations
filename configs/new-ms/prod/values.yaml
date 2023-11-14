@@ -16,7 +16,7 @@ resources:
 #             path: index.htm
 
 image:
-  name: argoproj/rollouts-demo:green
+  name: argoproj/rollouts-demo:blue
 service:
   name: http
   port: 8080
