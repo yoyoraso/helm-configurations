@@ -16,6 +16,10 @@ volumes:
             path: index.htm
 image:
   name: nginx
-
+service:
+  name: http
+  port: 80
+  targetPort: 80
+  
 prod: true
 bluegreen: true
