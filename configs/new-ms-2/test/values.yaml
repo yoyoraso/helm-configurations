@@ -7,10 +7,10 @@ resources:
     memory: 150Mi
 volumes:
   - mountPath: /usr/share/nginx/html
-    name: nginx-config-progressive-Delivery
+    name: nginx-config-new-ms-2
     volume:
       configMap:
-        name: application-config-progressive-Delivery
+        name: application-config-new-ms-2
         items:
           - key: index-blue.html
             path: index.html
