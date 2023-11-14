@@ -15,9 +15,9 @@ spec:
   {{- if .Values.multiport }}
     {{- range .Values.service.ports }}
   - name: {{ .name | default "http" }}
-    port: {{ .port | default 80 }}
+    port: {{ .port | default 8080 }}
     protocol: {{ .protocol | default "TCP" }}
-    targetPort: {{ .targetPort | default 80 }}
+    targetPort: {{ .targetPort | default 8080 }}
     {{- end }}
   {{- else }}
   - name: {{ ((.Values.service).name) | default "http" }}
