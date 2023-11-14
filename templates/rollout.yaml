@@ -88,12 +88,12 @@ spec:
         ports:
         {{- if .Values.multiport }}
           {{- range .Values.service.ports }}
-          - containerPort: {{ .targetPort | default 80 }}
+          - containerPort: {{ .targetPort | default 8080 }}
             name: {{ .name | default "http" }}
             protocol: {{ .protocol | default "TCP" }}
           {{- end }}
         {{- else }}
-          - containerPort: {{ ((.Values.service).targetPort) | default 80 }}
+          - containerPort: {{ ((.Values.service).targetPort) | default 8080 }}
             name: {{ ((.Values.service).name) | default "http" }}
         {{- end }}              
         volumeMounts:
