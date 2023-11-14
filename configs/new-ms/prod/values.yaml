@@ -20,7 +20,7 @@ image:
   name: argoproj/rollouts-demo:green
 service:
   name: http
-  port: 80
+  port: 8080
   targetPort: 8080
 
 prod: true
