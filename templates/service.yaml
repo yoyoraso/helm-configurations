@@ -50,7 +50,7 @@ spec:
     {{- end }}
   {{- else }}
   - name: {{ ((.Values.service).name) | default "http" }}
-    port: {{ ((.Values.service).port) | default 8080 }}
+    port: {{ ((.Values.service).port) | default 80 }}
     targetPort: {{ ((.Values.service).targetPort) | default 8080 }}  
   {{- end }}
 {{- end }}  
@@ -72,13 +72,13 @@ spec:
   {{- if .Values.multiport }}
     {{- range .Values.service.ports }}
   - name: {{ .name | default "http" }}
-    port: {{ .port | default 80 }}
+    port: {{ .port | default 8080 }}
     protocol: {{ .protocol | default "TCP" }}
     targetPort: {{ .targetPort | default 80 }}
     {{- end }}
   {{- else }}
   - name: {{ ((.Values.service).name) | default "http" }}
-    port: {{ ((.Values.service).port) | default 8080 }}
+    port: {{ ((.Values.service).port) | default 80 }}
     targetPort: {{ ((.Values.service).targetPort) | default 8080 }}  
   {{- end }}  
 {{- end }} 
