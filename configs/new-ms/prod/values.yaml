@@ -18,3 +18,4 @@ image:
   name: nginx
 
 prod: true
+canary: true
