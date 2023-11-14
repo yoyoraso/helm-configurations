@@ -14,10 +14,22 @@ spec:
       app: {{.Values.name}}
       env: prod
   strategy:
+  {{- if .Values.bluegreen }} 
     blueGreen:
       activeService: {{.Values.name}}-active
       autoPromotionEnabled: false
-      previewService: {{.Values.name}}-preview      
+      previewService: {{.Values.name}}-preview   
+  {{- end }}  
+  {{- if .Values.canary }} 
+    canary: 
+      steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 40
+      - pause: {}
+      - setWeight: 80
+      - pause: {}  
+  {{- end }}  
   replicas: {{.Values.replicas}}
   revisionHistoryLimit: 3
   template:
