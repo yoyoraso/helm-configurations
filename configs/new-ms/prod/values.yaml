@@ -15,7 +15,7 @@ resources:
 #           - key: index-green.html
 #             path: index.htm
 image:
-  name: argoproj/rollouts-demo:blue
+  name: argoproj/rollouts-demo:green
 
 prod: true
 canary: true
