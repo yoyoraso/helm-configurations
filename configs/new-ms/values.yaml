@@ -1,1 +1,4 @@
 name: new-ms
+secrets:
+  shared:
+  - COLORS/color
