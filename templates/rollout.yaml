@@ -23,12 +23,12 @@ spec:
   {{- if .Values.canary }} 
     canary:   
       steps:
-      - setWeight: 20
+      - setWeight: 50
       - pause: {}
-      - setWeight: 40
-      - pause: {}
-      - setWeight: 80
-      - pause: {}  
+      # - setWeight: 40
+      # - pause: {}
+      # - setWeight: 80
+      # - pause: {}  
   {{- end }}  
   replicas: {{.Values.replicas}}
   revisionHistoryLimit: 3
