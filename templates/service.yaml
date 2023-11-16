@@ -31,9 +31,9 @@ apiVersion: v1
 kind: Service 
 metadata:
   labels:
-    app: {{ .Values.name }}-stable
+    app: {{ .Values.name }}
     env: {{ .Release.Namespace }}
-  name: {{ .Values.name }}
+  name: {{ .Values.name }}-stable
   namespace: {{ .Release.Namespace }}
 spec:
   selector:
