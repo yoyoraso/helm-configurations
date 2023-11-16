@@ -52,7 +52,7 @@ spec:
     port: {{ ((.Values.service).port) | default 80 }}
     targetPort: {{ ((.Values.service).targetPort) | default 80 }}  
   {{- end }}
-{{- end }
+{{- end }}
 ---
 {{- if .Values.preprod }}
 apiVersion: v1 
