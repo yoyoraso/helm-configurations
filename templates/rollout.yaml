@@ -21,9 +21,7 @@ spec:
       previewService: {{.Values.name}}-preview   
   {{- end }}  
   {{- if .Values.canary }} 
-    canary: 
-      canaryService: {{.Values.name}}-canary
-      stableService: {{.Values.name}}-stable    
+    canary:   
       steps:
       - setWeight: 20
       - pause: {}
