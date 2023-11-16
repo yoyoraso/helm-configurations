@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{ .Values.name }}
     env: {{ .Release.Namespace }}
-  name: {{ .Values.name }}
+  name: {{ .Values.name }}-canary
   namespace: {{ .Release.Namespace }}
 spec:
   selector:
@@ -25,7 +25,35 @@ spec:
     targetPort: {{ ((.Values.service).targetPort) | default 80 }}  
   {{- end }}
 {{- end }} 
---- 
+---
+{{- if .Values.canary }}
+apiVersion: v1 
+kind: Service 
+metadata:
+  labels:
+    app: {{ .Values.name }}-stable
+    env: {{ .Release.Namespace }}
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: {{ .Values.name }}
+    env: {{ .Release.Namespace }}   
+  ports:
+  {{- if .Values.multiport }}
+    {{- range .Values.service.ports }}
+  - name: {{ .name | default "http" }}
+    port: {{ .port | default 8080 }}
+    protocol: {{ .protocol | default "TCP" }}
+    targetPort: {{ .targetPort | default 8080 }}
+    {{- end }}
+  {{- else }}
+  - name: {{ ((.Values.service).name) | default "http" }}
+    port: {{ ((.Values.service).port) | default 80 }}
+    targetPort: {{ ((.Values.service).targetPort) | default 80 }}  
+  {{- end }}
+{{- end }
+---
 {{- if .Values.preprod }}
 apiVersion: v1 
 kind: Service 
